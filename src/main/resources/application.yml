@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: expert
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${URL}
+    username: ${USER_NAME}
+    password: ${USER_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+jwt:
+  secret:
+    key: "o3CDb6THqNjE26GZ+hbLtbhjd1LRaBw6F6fZs3p9EdVC5Ocfhdowabj1JUiEZRBsCbxB9Xz4aqv6r/FzS6M7EA=="
+  bearer-prefix: "Bearer "
