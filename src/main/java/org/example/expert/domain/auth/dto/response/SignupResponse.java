@@ -1,13 +1,13 @@
 package org.example.expert.domain.auth.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor(staticName = "of")
 public class SignupResponse {
 
-    private final String bearerToken;
+    private String email;
+    private String nickname;
 
-    public SignupResponse(String bearerToken) {
-        this.bearerToken = bearerToken;
-    }
 }

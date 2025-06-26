@@ -16,6 +16,6 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
 jwt:
-  secret:
-    key: "o3CDb6THqNjE26GZ+hbLtbhjd1LRaBw6F6fZs3p9EdVC5Ocfhdowabj1JUiEZRBsCbxB9Xz4aqv6r/FzS6M7EA=="
+  secret: "o3CDb6THqNjE26GZ+hbLtbhjd1LRaBw6F6fZs3p9EdVC5Ocfhdowabj1JUiEZRBsCbxB9Xz4aqv6r/FzS6M7EA=="
+  expiration-in-ms: 36000000 # 1시간 밀리초단위
   bearer-prefix: "Bearer "
