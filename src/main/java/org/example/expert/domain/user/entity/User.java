@@ -1,6 +1,7 @@
 package org.example.expert.domain.user.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.expert.domain.common.dto.AuthUser;
@@ -9,7 +10,7 @@ import org.example.expert.domain.user.enums.UserRole;
 
 @Getter
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
 public class User extends Timestamped {
 
@@ -26,21 +27,15 @@ public class User extends Timestamped {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
-    public User(String email, String password, String nickname, UserRole userRole) {
+    private User(String email, String password, String nickname, UserRole userRole) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.userRole = userRole;
     }
 
-    private User(Long id, String email, UserRole userRole) {
-        this.id = id;
-        this.email = email;
-        this.userRole = userRole;
-    }
-
-    public static User fromAuthUser(AuthUser authUser) {
-        return new User(authUser.getId(), authUser.getEmail(), authUser.getUserRole());
+    public static User of(String email, String password, String nickname, UserRole userRole) {
+        return new User(email, password, nickname, userRole);
     }
 
     public void changePassword(String password) {
