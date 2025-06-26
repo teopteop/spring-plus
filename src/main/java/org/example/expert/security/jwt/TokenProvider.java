@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 
 import javax.swing.*;
 
+import org.example.expert.security.userDetails.CustomUserDetails;
+import org.example.expert.security.userDetails.CustomUserDetailsService;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,12 +22,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class TokenProvider implements InitializingBean {
 
+	private final CustomUserDetailsService userDetailsService;
 	//단순히 설정파일에서 받아온 암호화된 문자열
 	private final String secret;
 
@@ -52,10 +51,12 @@ public class TokenProvider implements InitializingBean {
 	*/
 	public TokenProvider(@Value("${jwt.secret}") String secret,
 		@Value("${jwt.expiration-in-ms}") Long validityInMilliseconds,
-		@Value("${jwt.bearer-prefix}") String bearerPrefix) {
+		@Value("${jwt.bearer-prefix}") String bearerPrefix,
+		CustomUserDetailsService userDetailsService) {
 		this.secret = secret;
 		this.validityInMilliseconds = validityInMilliseconds;
 		this.bearerPrefix = bearerPrefix;
+		this.userDetailsService = userDetailsService;
 	}
 
 	//빈 초기화 완료 후 작업할 초기화 코드
@@ -97,12 +98,15 @@ public class TokenProvider implements InitializingBean {
 			.parseClaimsJws(token)
 			.getBody();
 
+		//권한정보 파싱 role
 		Collection<? extends GrantedAuthority> authorities =
 			Arrays.stream(claims.get("auth").toString().split(","))
 			.map(SimpleGrantedAuthority::new)
 			.toList();
 
-		UserDetails principal = new User(claims.getSubject(), "", authorities);
+		String email = claims.getSubject();
+
+		UserDetails principal = userDetailsService.loadUserByUsername(email);
 
 		return new UsernamePasswordAuthenticationToken(principal, token, authorities);
 	}

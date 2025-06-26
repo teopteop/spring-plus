@@ -27,6 +27,7 @@ public class SecurityConfig {
 	//예외핸들러
 	private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
 	//토큰생성기 == JwtUtil
 	private final TokenProvider tokenProvider;
@@ -53,7 +54,7 @@ public class SecurityConfig {
 			.exceptionHandling(exception -> exception
 				.authenticationEntryPoint(jwtAuthenticationEntryPoint) //인증실패 예외 핸들러
 				.accessDeniedHandler(jwtAccessDeniedHandler)) //인가실패 예외 핸들러
-			.addFilterBefore(new JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 			.build();
 	}
 

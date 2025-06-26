@@ -6,6 +6,7 @@ import org.example.expert.security.jwt.JwtExceptionType;
 import org.example.expert.security.jwt.TokenProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -33,6 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 		//토큰이 비어있으면 바로 다음 필터로 진행
 		if(token == null) {
+			log.debug("토큰이 비어있습니다. uri: {}", request.getRequestURI());
 			request.setAttribute("exception", JwtExceptionType.EMPTY_TOKEN.name());
 			filterChain.doFilter(request, response);
 			return;

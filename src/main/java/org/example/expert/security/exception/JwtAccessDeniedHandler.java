@@ -13,7 +13,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
@@ -33,6 +35,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 
 		Map<String, String> errorMessage = Map.of("message", accessDeniedException.getMessage());
 		response.getWriter().write(objectMapper.writeValueAsString(errorMessage));
+		log.debug("디나이드핸들러 uri: {}", request.getRequestURI());
 
 	}
 }

@@ -16,7 +16,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
@@ -53,7 +55,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
 		Map<String, String> errorMessage = Map.of("message", jwtExceptionType.getMessage());
 		response.getWriter().write(objectMapper.writeValueAsString(errorMessage));
-
+		log.debug("엔트리포인트 uri: {}", request.getRequestURI());
 	}
 
 }
