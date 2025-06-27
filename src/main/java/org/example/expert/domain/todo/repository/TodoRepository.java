@@ -1,5 +1,6 @@
 package org.example.expert.domain.todo.repository;
 
+import org.example.expert.domain.todo.dto.response.TodoSearchResponse;
 import org.example.expert.domain.todo.entity.Todo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -7,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 public interface TodoRepository extends JpaRepository<Todo, Long>, TodoCustomRepository {
@@ -19,5 +21,7 @@ public interface TodoRepository extends JpaRepository<Todo, Long>, TodoCustomRep
     //         "WHERE t.id = :todoId")
     // Optional<Todo> findByIdWithUser(@Param("todoId") Long todoId);
 
-
+    @Override
+    Page<TodoSearchResponse> searchTodosInfo(Pageable pageable, String title, String nickname, LocalDate periodStart,
+        LocalDate periodEnd);
 }
