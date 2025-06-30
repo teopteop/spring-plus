@@ -55,8 +55,6 @@ public class UserService {
     }
 
 	public List<UserResponse> findUserByNickname(UserNicknameRequest userNicknameRequest) {
-        List<User> foundUsers = userRepository.findByNickname(userNicknameRequest.getNickname());
-
-        return foundUsers.stream().map(user -> UserResponse.of(user.getId(), user.getEmail(), user.getNickname())).toList();
+        return userRepository.findProjectedUsersByNickname(userNicknameRequest.getNickname());
     }
 }
