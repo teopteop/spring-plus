@@ -1,9 +1,13 @@
 package org.example.expert.domain.user.service;
 
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 
 import org.example.expert.domain.common.exception.InvalidRequestException;
+import org.example.expert.domain.common.exception.UserNotFoundException;
 import org.example.expert.domain.user.dto.request.UserChangePasswordRequest;
+import org.example.expert.domain.user.dto.request.UserNicknameRequest;
 import org.example.expert.domain.user.dto.response.UserResponse;
 import org.example.expert.domain.user.entity.User;
 import org.example.expert.domain.user.repository.UserRepository;
@@ -21,7 +25,7 @@ public class UserService {
 
     public UserResponse getUser(long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new InvalidRequestException("User not found"));
-        return new UserResponse(user.getId(), user.getEmail());
+        return UserResponse.of(user.getId(), user.getEmail(), user.getNickname());
     }
 
     @Transactional
@@ -48,5 +52,11 @@ public class UserService {
                 !userChangePasswordRequest.getNewPassword().matches(".*[A-Z].*")) {
             throw new InvalidRequestException("새 비밀번호는 8자 이상이어야 하고, 숫자와 대문자를 포함해야 합니다.");
         }
+    }
+
+	public List<UserResponse> findUserByNickname(UserNicknameRequest userNicknameRequest) {
+        List<User> foundUsers = userRepository.findByNickname(userNicknameRequest.getNickname());
+
+        return foundUsers.stream().map(user -> UserResponse.of(user.getId(), user.getEmail(), user.getNickname())).toList();
     }
 }
