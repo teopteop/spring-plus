@@ -18,6 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	List<User> findByNickname(String nickname);
 
+	//프로젝션 적용 -> DTO 로 반환
 	@Query("select new org.example.expert.domain.user.dto.response.UserResponse(u.id, u.email, u.nickname) from User u "
 		+ "where u.nickname = :nickname")
 	List<UserResponse> findProjectedUsersByNickname(@Param("nickname") String nickname);

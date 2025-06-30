@@ -89,6 +89,7 @@ public class TodoCustomRepositoryImpl implements TodoCustomRepository {
 		return new PageImpl<>(contents, pageable, total);
 	}
 
+	//이하 동적 쿼리 작성을 위한 헬퍼 메서드
 	private BooleanExpression titleContains(String title) {
 		return StringUtils.hasText(title) ? todo.title.contains(title) : null;
 	}
@@ -105,6 +106,7 @@ public class TodoCustomRepositoryImpl implements TodoCustomRepository {
 		return periodEnd != null ? todo.createdAt.loe(periodEnd.atTime(LocalTime.MAX)) : null;
 	}
 
+	//주어진 인자에 따라 검색 조건 변경
 	private BooleanExpression periodBetween(LocalDate periodStart, LocalDate periodEnd) {
 		//LocalDate 에 시간을 붙여 LocalDateTime 으로 변환, null 일때 null 값 세팅
 		LocalDateTime startDateTime = periodStart != null ? periodStart.atStartOfDay() : null;
