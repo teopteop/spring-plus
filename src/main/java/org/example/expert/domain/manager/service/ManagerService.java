@@ -58,14 +58,14 @@ public class ManagerService {
             Manager newManagerUser = new Manager(managerUser, todo);
             Manager savedManagerUser = managerRepository.save(newManagerUser);
 
-            logService.logManagerRegistration(todoId, userDetails.getId());
+            logService.logManagerRegistration(todoId, managerSaveRequest.getManagerUserId());
 
             return new ManagerSaveResponse(
                     savedManagerUser.getId(),
-                    new UserResponse(managerUser.getId(), managerUser.getEmail())
+                    UserResponse.of (managerUser.getId(), managerUser.getEmail(), managerUser.getNickname())
             );
         } catch (Exception e) {
-            logService.logManagerFailure(todoId, userDetails.getId());
+            logService.logManagerFailure(todoId, managerSaveRequest.getManagerUserId());
             throw e;
         }
 
@@ -82,7 +82,7 @@ public class ManagerService {
             User user = manager.getUser();
             dtoList.add(new ManagerResponse(
                     manager.getId(),
-                    new UserResponse(user.getId(), user.getEmail())
+                    UserResponse.of(user.getId(), user.getEmail(), user.getNickname())
             ));
         }
         return dtoList;
